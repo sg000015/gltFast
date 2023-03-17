@@ -7,6 +7,7 @@ using System.IO;
 using GLTFast;
 using System.Runtime.InteropServices;
 using UnityEngine.Networking;
+using Dtype;
 
 
 public class GLTFManager : MonoBehaviour
@@ -30,8 +31,6 @@ public class GLTFManager : MonoBehaviour
         }
     }
 
-    public Material mat;
-
     public IButton ibuttonDown;
     public string gltfUrl = "https://s3.ap-northeast-2.amazonaws.com/com.test.addressable231/GLTF/uploads_files_3999951_heart2_glb.glb";
 
@@ -46,26 +45,16 @@ public class GLTFManager : MonoBehaviour
     }
 
 
-    // public void LoadOnRuntime()
-    // {
-    //     var gltf = gameObject.AddComponent<GLTFast.GltfAsset>();
-    //     gltf.Url = gltfUrl;
-    // }
-
-
-
     public void OpenFileBrowser()
     {
-
 #if UNITY_WEBGL && !UNITY_EDITOR
         OpenFileBrowser(this.gameObject.name, "DownloadGLBByte");
-#endif
-
-#if UNITY_EDITOR
+#elif UNITY_EDITOR
         LoadGlbOnEditor(EditorUtility.OpenFilePanel("Load glb File", "", "glb,gltf"));
-        // LoadGlb(EditorUtility.OpenFilePanel("Load glb File", "", ""));
 #endif
     }
+
+
 
     //URL로 생성 => 에디터전용 
     async void LoadGlbOnEditor(string filePath)
@@ -88,16 +77,8 @@ public class GLTFManager : MonoBehaviour
         bool success = await gltf.Load(data);
         if (success)
         {
-
-            Debug.Log(gltf.SceneCount);
-            // var instantiator = new GameObjectInstantiator(gltf, transform);
-            success = await gltf.InstantiateSceneAsync(transform);
-
-            // if (success)
-            // {
-            //     //추가된 오브젝트 전처리 
-            //     transform.GetChild(transform.childCount - 1).gameObject.name = "JJK";
-            // }
+            success = await gltf.InstantiateSceneAsync(DtypeObjectManager.Dt_Transorm);
+            DtypeObjectManager.Inst.AddObject(data);
         }
     }
 
@@ -196,59 +177,6 @@ public class GLTFManager : MonoBehaviour
     public void OpenFileBrowser(string callbackObjectName, string callbackMethodName)
     {
         OpenFileBrowserWebGL(callbackObjectName, callbackMethodName);
-
-
-        /* 
-        Application.ExternalEval(
-                @"
-var function_upload = function() {
-    document.removeEventListener('click', function_upload);
-
-    var fileuploader = document.getElementById('fileuploader');
-    if (!fileuploader) 
-    {
-        fileuploader = document.createElement('input');
-        fileuploader.setAttribute('style','display:none;');
-        fileuploader.setAttribute('type', 'file');
-        fileuploader.setAttribute('id', 'fileuploader');
-        fileuploader.setAttribute('class', 'focused');
-        fileuploader.setAttribute('accept', '.glb');
-        document.getElementsByTagName('body')[0].appendChild(fileuploader);
-
-        fileuploader.onchange = function(e) {
-        var files = e.target.files;
-            for (var i = 0, f; f = files[i]; i++) {
-                // var filePath = URL.createObjectURL(f);
-                if(f.name.substr(f.name.length-3)=='glb')
-                {
-				//URL.createObjectURL(f);    
-                  SendMessage('" + callbackObjectName + @"', '" + callbackMethodName + @"', URL.createObjectURL(f)); 
-                }
-                else
-                {
-                    alert('it is not glb file');
-                }
-            }
-        };
-    }
-
-    if (fileuploader.getAttribute('class') == 'focused') {
-        fileuploader.setAttribute('class', '');
-        fileuploader.click();
-    }
-}
-
-var fileuploader = document.getElementById('fileuploader');
-if(fileuploader)
-{
-	document.getElementById('fileuploader').disabled = true;
-	document.removeEventListener('click', function_upload);
-	fileuploader.parentNode.removeChild(fileuploader);
-}
-
-document.addEventListener('click', function_upload);
-            ");
-        */
     }
 
 

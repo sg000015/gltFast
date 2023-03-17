@@ -1,7 +1,6 @@
 mergeInto(LibraryManager.library, {
-    OpenFileBrowserWebGL: function (callbackObjectName, callbackMethodName) {
+    OpenFileBrowserWebGL: function (callbackObjectName) {
         var objectName = UTF8ToString(callbackObjectName);
-        var methodName = UTF8ToString(callbackMethodName);
         var function_upload = function () {
             document.removeEventListener("click", function_upload);
             var fileuploader = document.getElementById("fileuploader");
@@ -27,7 +26,7 @@ mergeInto(LibraryManager.library, {
                             //URL.createObjectURL(f);
                             SendMessage(
                                 objectName,
-                                methodName,
+                                "LoadGlbWebGL",
                                 URL.createObjectURL(f)
                             );
                         } else {
