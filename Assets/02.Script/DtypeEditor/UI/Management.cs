@@ -38,7 +38,7 @@ namespace DtypeUI
         {
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        OpenFileBrowserWebGL(this.gameObject.name);
+        // OpenFileBrowserWebGL(this.gameObject.name);
 #elif UNITY_EDITOR
             OpenFileBrowserEditor(EditorUtility.OpenFilePanel("Load File", "", "glb,gltf"));
 #endif

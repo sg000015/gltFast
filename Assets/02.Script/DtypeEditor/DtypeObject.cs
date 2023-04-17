@@ -19,6 +19,12 @@ namespace Dtype
             // EventSystem.current.IsPointerOverGameObject()
         }
 
+        [ContextMenu("ExportFile")]
+        void A()
+        {
+            System.IO.File.WriteAllBytes(Application.dataPath + "/DtypeData.bytes", d_data.data);
+            Debug.Log(Application.dataPath + "/DtypeData.bytes");
+        }
 
 
 

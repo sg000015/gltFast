@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if Unity_Editor
 using UnityEditor;
 
 
 [CustomEditor(typeof(Test))]
 public class TestEditor : Editor
 {
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
@@ -28,3 +30,5 @@ public class TestEditor : Editor
     }
 
 }
+
+#endif
